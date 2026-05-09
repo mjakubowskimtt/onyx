@@ -11,7 +11,7 @@ import {
   LLMProviderView,
   WellKnownLLMProviderDescriptor,
 } from "@/interfaces/llm";
-import { useCurrentAgent } from "@/hooks/useAgents";
+import { useCurrentAgent } from "@/lib/agents/hooks";
 
 /**
  * Fetches configured LLM providers accessible to the current user.
