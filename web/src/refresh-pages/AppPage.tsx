@@ -708,7 +708,8 @@ export default function AppPage({ firstMessage }: ChatPageProps) {
     return <NoAgentModal />;
   }
 
-  const hasStarterMessages = (liveAgent?.starter_messages?.length ?? 0) > 0;
+  const hasAgentStarterMessages =
+    (liveAgent?.starter_messages?.length ?? 0) > 0;
 
   const gridStyle = {
     gridTemplateColumns: "1fr",
@@ -1046,7 +1047,7 @@ export default function AppPage({ firstMessage }: ChatPageProps) {
                   <Fade
                     show={
                       (appFocus.isNewSession() || appFocus.isAgent()) &&
-                      hasStarterMessages
+                      hasAgentStarterMessages
                     }
                     className="h-full flex-1 w-full max-w-[var(--app-page-main-content-width)]"
                   >
