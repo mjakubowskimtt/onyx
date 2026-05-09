@@ -6,7 +6,7 @@ import * as SettingsLayouts from "@/layouts/settings-layouts";
 import * as GeneralLayouts from "@/layouts/general-layouts";
 import { Button, Card, Divider, MessageCard } from "@opal/components";
 import { Hoverable, Disabled } from "@opal/core";
-import { FullPersona } from "@/lib/agents/types";
+import { FullAgent } from "@/lib/agents/types";
 import { buildAgentAvatarUrl } from "@/lib/agents/utils";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -68,7 +68,7 @@ import InputAvatar from "@/refresh-components/inputs/InputAvatar";
 import SquareButton from "@/refresh-components/buttons/SquareButton";
 import { useAgents } from "@/lib/agents/hooks";
 import { createAgent, updateAgent } from "@/lib/agents/svc";
-import { AgentUpsertParameters } from "@/lib/agents/svc";
+import { AgentUpsertParameters } from "@/lib/agents/types";
 import { useMcpServersForAgentEditor } from "@/lib/agents/hooks";
 import useOpenApiTools from "@/hooks/useOpenApiTools";
 import { useAvailableTools } from "@/hooks/useAvailableTools";
@@ -94,7 +94,7 @@ import SimpleLoader from "@/refresh-components/loaders/SimpleLoader";
 import { usePaidEnterpriseFeaturesEnabled } from "@/components/settings/usePaidEnterpriseFeaturesEnabled";
 
 interface AgentIconEditorProps {
-  existingAgent?: FullPersona | null;
+  existingAgent?: FullAgent | null;
 }
 
 function FormWarningsEffect() {
@@ -473,7 +473,7 @@ function StarterMessages() {
 }
 
 export interface AgentEditorPageProps {
-  agent?: FullPersona;
+  agent?: FullAgent;
   refreshAgent?: () => void;
 }
 
