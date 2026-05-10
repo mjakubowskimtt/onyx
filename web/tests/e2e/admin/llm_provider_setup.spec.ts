@@ -179,7 +179,11 @@ async function getModelCountInChatSelector(
     await dialog.waitFor({ state: "hidden", timeout: 5000 });
   }
 
-  await page.getByTestId("model-selector").locator("button").first().click();
+  await page
+    .getByTestId("multi-model-selector")
+    .locator("button")
+    .first()
+    .click();
   await dialog.waitFor({ state: "visible", timeout: 10000 });
 
   await dialog.getByPlaceholder("Search models...").fill(modelName);
@@ -374,18 +378,30 @@ test.describe("LLM Provider Setup @exclusive", () => {
       await page.waitForLoadState("networkidle");
 
       // Open the Default Model dropdown and select the model from the
-      // second provider's group (scoped to avoid picking a same-named model
-      // from another provider).
-      await page.getByRole("combobox").click();
-      const targetGroup = page
-        .locator('[role="group"]')
-        .filter({ hasText: secondProviderName });
+      // second provider. Search by model name to avoid ambiguity across providers.
+      await page
+        .getByTestId("model-selector")
+        .locator("button")
+        .first()
+        .click();
+      const dialog = page.locator('[role="dialog"]').first();
+      await dialog.waitFor({ state: "visible", timeout: 10000 });
+      await dialog.getByPlaceholder("Search models...").fill(secondModelName);
       const defaultResponsePromise = page.waitForResponse(
         (response) =>
           response.url().includes("/api/admin/llm/default") &&
           response.request().method() === "POST"
       );
-      await targetGroup.locator('[role="option"]').click();
+      // Use a text filter so the click implicitly waits for React to process
+      // the search-query state update before selecting — prevents clicking the
+      // first (unfiltered) option before the list narrows to secondModelName.
+      await dialog
+        .locator("[data-interactive-state]")
+        .filter({
+          hasText: new RegExp(secondModelName.replace(/-/g, "."), "i"),
+        })
+        .first()
+        .click();
       await defaultResponsePromise;
 
       // Verify the default switched to the second provider
